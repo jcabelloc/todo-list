@@ -1,6 +1,8 @@
 package com.tamu.jcabelloc.todolist;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -86,8 +88,32 @@ public class Todo extends AppCompatActivity {
                     todoAdapter.notifyDataSetChanged();
                     doneAdapter.notifyDataSetChanged();
                     doneTaskListView.setItemChecked(doneTaskIds.size() - 1, true);
-                    //Log.i("i value", String.valueOf(todoTaskIds.get(i)));
                 }
+            }
+        });
+        todoTaskListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                final int itemIndex = i;
+                new AlertDialog.Builder(Todo.this)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("Sure to Delete?")
+                        .setMessage("Do you want to delete that task?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Toast.makeText(MainActivity.this, "Its done!", Toast.LENGTH_LONG).show();
+                                int deletedRows = db.deleteTodoTask(todoTaskIds.get(itemIndex));
+                                if (deletedRows == 1) {
+                                    todoTaskNames.remove(itemIndex);
+                                    todoTaskIds.remove(itemIndex);
+                                    todoAdapter.notifyDataSetChanged();
+                                }
+                            }
+                        })
+                        .setNegativeButton("No",null)
+                        .show();
+                return true;
             }
         });
         doneTaskListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -102,8 +128,7 @@ public class Todo extends AppCompatActivity {
                     doneTaskIds.remove(i);
                     todoAdapter.notifyDataSetChanged();
                     doneAdapter.notifyDataSetChanged();
-                    //todoTaskListView.setItemChecked(todoTaskIds.size() - 1, false);
-                    //Log.i("i value", String.valueOf(todoTaskIds.get(i)));
+
                 }
 
             }

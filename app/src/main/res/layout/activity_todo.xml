@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="13dp"
         android:ems="10"
         android:hint="ToDo Task"
         android:inputType="text"
@@ -31,22 +31,48 @@
         tools:layout_editor_absoluteX="299dp"
         tools:layout_editor_absoluteY="10dp" />
 
+    <TextView
+        android:id="@+id/todoTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/todoTaskEditText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="13dp"
+        android:text="Todo Tasks"
+        android:textAlignment="center"
+        android:background="#ffccde"
+        android:textSize="20sp" />
+
     <ListView
         android:id="@+id/todoTaskListView"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_below="@+id/todoTaskEditText"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/todoTextView"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="19dp" >
+        android:layout_marginTop="10dp" >
 
     </ListView>
+
+    <TextView
+        android:id="@+id/doneTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/todoTaskListView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="13dp"
+        android:textAlignment="center"
+        android:background="#ffccde"
+        android:text="Done Tasks"
+        android:textSize="20sp" />
 
     <ListView
         android:id="@+id/doneTaskLisView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/todoTaskListView"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/doneTextView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp" />
+
+
 
 </RelativeLayout>

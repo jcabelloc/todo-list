@@ -72,6 +72,12 @@ public class TodoTaskDBH extends SQLiteOpenHelper {
         values.put(STATUS, todoTask.getStatus());
         return sqLiteDatabase.update(TABLE_TODOTASK, values, ID + " =? ", new String[]{String.valueOf(todoTask.getId())});
     }
+    public int deleteTodoTask(int id){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        int deletedRows = sqLiteDatabase.delete(TABLE_TODOTASK, ID + " =? ", new String[]{String.valueOf(id)});
+        sqLiteDatabase.close();
+        return deletedRows;
+    }
 
     public List<TodoTask> getAllTodoTask() {
         List<TodoTask> todoTaskList = new ArrayList<>();

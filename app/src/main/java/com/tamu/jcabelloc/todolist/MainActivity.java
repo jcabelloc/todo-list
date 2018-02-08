@@ -21,8 +21,6 @@ public class MainActivity extends AppCompatActivity {
     ToDoGroupDBH db;
 
     public void addGroupName(View view) {
-        //Log.i("input", groupNameText.getText().toString());
-
         int id = db.addTodoGroup(new TodoGroup(todoGroupEditText.getText().toString()));
         groupNames.add(todoGroupEditText.getText().toString());
         groupId.add(id);
