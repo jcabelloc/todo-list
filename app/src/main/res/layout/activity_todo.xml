@@ -34,11 +34,19 @@
     <ListView
         android:id="@+id/todoTaskListView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:layout_below="@+id/todoTaskEditText"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="19dp" >
 
     </ListView>
+
+    <ListView
+        android:id="@+id/doneTaskLisView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/todoTaskListView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp" />
 
 </RelativeLayout>

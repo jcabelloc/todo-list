@@ -63,6 +63,16 @@ public class TodoTaskDBH extends SQLiteOpenHelper {
         TodoTask todoTask = new TodoTask(cur.getInt(0), cur.getInt(1), cur.getString(2), cur.getInt(3));
         return todoTask;
     }
+    public int updateTodoTask(TodoTask todoTask) {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(ID, todoTask.getId());
+        values.put(ID_GROUP, todoTask.getIdGroup());
+        values.put(NAME, todoTask.getName());
+        values.put(STATUS, todoTask.getStatus());
+        return sqLiteDatabase.update(TABLE_TODOTASK, values, ID + " =? ", new String[]{String.valueOf(todoTask.getId())});
+    }
+
     public List<TodoTask> getAllTodoTask() {
         List<TodoTask> todoTaskList = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
@@ -83,10 +93,10 @@ public class TodoTaskDBH extends SQLiteOpenHelper {
         }
         return todoTaskList;
     }
-    public List<TodoTask> getAllTodoTaskByIdGroup(int idGroup){
+    public List<TodoTask> getAllTodoTaskByIdGroupStatus(int idGroup, int status){
         List<TodoTask> todoTaskList = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-        Cursor cur = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_TODOTASK + " WHERE " + ID_GROUP + " = " + idGroup , null);
+        Cursor cur = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_TODOTASK + " WHERE " + ID_GROUP + " = " + idGroup + " AND " + STATUS + " = "  + status, null);
         int idIndex = cur.getColumnIndex(ID);
         int idGroupIndex = cur.getColumnIndex(ID_GROUP);
         int nameIndex = cur.getColumnIndex(NAME);

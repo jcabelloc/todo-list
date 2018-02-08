@@ -5,7 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -16,16 +18,20 @@ public class Todo extends AppCompatActivity {
 
     EditText todoTaskEditText;
     List<String> todoTaskNames;
-    ArrayAdapter adapter;
+    List<Integer> todoTaskIds;
+    List<String> doneTaskNames;
+    List<Integer> doneTaskIds;
+    ArrayAdapter todoAdapter;
+    ArrayAdapter doneAdapter;
     TodoTaskDBH db;
     int idGroup;
     public void addTodoTask(View view) {
-        todoTaskNames.add(todoTaskEditText.getText().toString());
         int i = db.addTodoTask(new TodoTask(idGroup,todoTaskEditText.getText().toString(), 0));
+        todoTaskNames.add(todoTaskEditText.getText().toString());
+        todoTaskIds.add(i);
         Log.i("Record inserted", String.valueOf(i));
-        adapter.notifyDataSetChanged();
+        todoAdapter.notifyDataSetChanged();
         todoTaskEditText.setText("");
-
     }
 
     @Override
@@ -34,21 +40,73 @@ public class Todo extends AppCompatActivity {
         setContentView(R.layout.activity_todo);
         Intent intent = getIntent();
         idGroup = Integer.valueOf(intent.getStringExtra("id"));
-        //Log.i("id", intent.getStringExtra("id"));
-
         todoTaskEditText = (EditText)findViewById(R.id.todoTaskEditText);
+        final ListView todoTaskListView = (ListView) findViewById(R.id.todoTaskListView);
+        final ListView doneTaskListView = (ListView) findViewById(R.id.doneTaskLisView);
 
-
-        ListView todoTaskListView = (ListView) findViewById(R.id.todoTaskListView);
+        todoTaskListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        doneTaskListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         todoTaskNames = new ArrayList<>();
+        todoTaskIds = new ArrayList<>();
+        doneTaskNames = new ArrayList<>();
+        doneTaskIds = new ArrayList<>();
+
         db = new TodoTaskDBH(this);
         //db.onUpgrade(db.getWritableDatabase(), 0, 0);
         db.onCreate(db.getWritableDatabase());
-        List<TodoTask> todoTasks = db.getAllTodoTaskByIdGroup(idGroup);
+        final List<TodoTask> todoTasks = db.getAllTodoTaskByIdGroupStatus(idGroup, 0);
+        List<TodoTask> doneTasks = db.getAllTodoTaskByIdGroupStatus(idGroup, 1);
         for (TodoTask todoTask:todoTasks){
             todoTaskNames.add(todoTask.getName());
+            todoTaskIds.add(todoTask.getId());
         }
-        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, todoTaskNames);
-        todoTaskListView.setAdapter(adapter);
+        for (TodoTask doneTask:doneTasks){
+            doneTaskNames.add(doneTask.getName());
+            doneTaskIds.add(doneTask.getId());
+        }
+        todoAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_multiple_choice, todoTaskNames);
+        doneAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_multiple_choice, doneTaskNames);
+        todoTaskListView.setAdapter(todoAdapter);
+        doneTaskListView.setAdapter(doneAdapter);
+
+        for (int i =0; i < doneTaskIds.size(); i++) {
+            doneTaskListView.setItemChecked(i, true);
+        }
+
+        todoTaskListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                todoTaskListView.setItemChecked(i, false);
+                int recordsUpdated = db.updateTodoTask(new TodoTask(todoTaskIds.get(i), idGroup, todoTaskNames.get(i), 1));
+                if (recordsUpdated == 1) {
+                    doneTaskNames.add(todoTaskNames.get(i));
+                    doneTaskIds.add(todoTaskIds.get(i));
+                    todoTaskNames.remove(i);
+                    todoTaskIds.remove(i);
+                    todoAdapter.notifyDataSetChanged();
+                    doneAdapter.notifyDataSetChanged();
+                    doneTaskListView.setItemChecked(doneTaskIds.size() - 1, true);
+                    //Log.i("i value", String.valueOf(todoTaskIds.get(i)));
+                }
+            }
+        });
+        doneTaskListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                doneTaskListView.setItemChecked(i, true);
+                int recordsUpdated = db.updateTodoTask(new TodoTask(doneTaskIds.get(i), idGroup, doneTaskNames.get(i), 0));
+                if (recordsUpdated == 1) {
+                    todoTaskNames.add(doneTaskNames.get(i));
+                    todoTaskIds.add(doneTaskIds.get(i));
+                    doneTaskNames.remove(i);
+                    doneTaskIds.remove(i);
+                    todoAdapter.notifyDataSetChanged();
+                    doneAdapter.notifyDataSetChanged();
+                    //todoTaskListView.setItemChecked(todoTaskIds.size() - 1, false);
+                    //Log.i("i value", String.valueOf(todoTaskIds.get(i)));
+                }
+
+            }
+        });
     }
 }
