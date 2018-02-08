@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.tamu.jcabelloc.todolist.Todo">
+
+    <EditText
+        android:id="@+id/todoTaskEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22dp"
+        android:ems="10"
+        android:hint="ToDo Task"
+        android:inputType="text"
+        tools:layout_editor_absoluteX="84dp"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/todoTaskEditText"
+        android:layout_marginStart="13dp"
+        android:layout_toEndOf="@+id/todoTaskEditText"
+        android:onClick="addTodoTask"
+        app:srcCompat="@android:drawable/ic_input_add"
+        tools:layout_editor_absoluteX="299dp"
+        tools:layout_editor_absoluteY="10dp" />
+
+    <ListView
+        android:id="@+id/todoTaskListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/todoTaskEditText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="19dp" >
+
+    </ListView>
+
+</RelativeLayout>
