@@ -53,8 +53,8 @@ public class Todo extends AppCompatActivity {
         doneTaskNames = new ArrayList<>();
         doneTaskIds = new ArrayList<>();
 
+        // Retrieve all tasks (ToDo and Done) from DB
         db = new TodoTaskDBH(this);
-        //db.onUpgrade(db.getWritableDatabase(), 0, 0);
         db.onCreate(db.getWritableDatabase());
         final List<TodoTask> todoTasks = db.getAllTodoTaskByIdGroupStatus(idGroup, 0);
         List<TodoTask> doneTasks = db.getAllTodoTaskByIdGroupStatus(idGroup, 1);
@@ -75,6 +75,7 @@ public class Todo extends AppCompatActivity {
             doneTaskListView.setItemChecked(i, true);
         }
 
+        // Add handler for Click Event in the Todo List
         todoTaskListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -91,6 +92,8 @@ public class Todo extends AppCompatActivity {
                 }
             }
         });
+
+        // Add handler for LongClick Event in the ToDo List
         todoTaskListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -116,6 +119,8 @@ public class Todo extends AppCompatActivity {
                 return true;
             }
         });
+
+        // Add handler for Click Event in the Done List
         doneTaskListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

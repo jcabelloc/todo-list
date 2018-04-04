@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayAdapter adapter;
     ToDoGroupDBH db;
 
+    // Add a Name for a Group of Tasks
     public void addGroupName(View view) {
         int id = db.addTodoGroup(new TodoGroup(todoGroupEditText.getText().toString()));
         groupNames.add(todoGroupEditText.getText().toString());
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         todoGroupEditText = (EditText)findViewById(R.id.todoGroupEditText);
         ListView groupListView = (ListView)findViewById(R.id.groupListView);
 
+        // Retrieve all the Group Names to show in the List
         groupNames = new ArrayList<>();
         groupId = new ArrayList<>();
         db = new ToDoGroupDBH(this);
@@ -45,9 +47,10 @@ public class MainActivity extends AppCompatActivity {
             groupNames.add(todoGroup.getName());
             groupId.add(todoGroup.getId());
         }
-
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, groupNames);
         groupListView.setAdapter(adapter);
+
+        // Set the Click Event to Open the ToDo Activity
         groupListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
